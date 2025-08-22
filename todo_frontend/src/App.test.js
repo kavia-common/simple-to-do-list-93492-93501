@@ -1,8 +1,17 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+test('renders header and add form', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  expect(screen.getByText(/Simple Todos/i)).toBeInTheDocument();
+  expect(screen.getByPlaceholderText(/Add a new task/i)).toBeInTheDocument();
+});
+
+test('allows adding a todo', () => {
+  render(<App />);
+  const input = screen.getByPlaceholderText(/Add a new task/i);
+  const addBtn = screen.getByRole('button', { name: /Add/i });
+  fireEvent.change(input, { target: { value: 'Buy milk' } });
+  fireEvent.click(addBtn);
+  expect(screen.getByText('Buy milk')).toBeInTheDocument();
 });
